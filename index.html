@@ -1,10 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>EU in Friedenau</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <style>
+    html, body, #map { height: 100%; margin: 0; }
+  </style>
+</head>
+<body>
+
+
+
+
+<div id="map"></div>
+
+<!-- 1️⃣ Leaflet JS ZUERST -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- 2️⃣ DANN dein Modul -->
 <script type="module">
-  import { initMap } from "./js/map.js";
-  import { createEuLayer } from "./js/layers.js";
-  import { loadGeoJSON } from "./js/dataLoader.js";
+  
+
+  import { initMap, euIcon } from "./js/map.js";
 
   const map = initMap();
 
-  const euData = await loadGeoJSON("./data/eu_projects.geojson");
-  createEuLayer(euData).addTo(map);
+ 
+
+    fetch("./data/eu_projects.geojson")
+    .then(res => res.json())
+    .then(data => {
+        L.geoJSON(data, {
+        // Punkt → Marker
+        pointToLayer: (feature, latlng) => {
+            // Wenn eu_flag true, dann EU-Icon
+            if (feature.properties.eu_flag) {
+            return L.marker(latlng, { icon: euIcon });
+            } else {
+            return L.marker(latlng); // Standardmarker
+            }
+        },
+
+        onEachFeature: (feature, layer) => {
+            layer.bindPopup(`
+            <strong>${feature.properties.name}</strong><br>
+            Programm: ${feature.properties.program}
+            `);
+        }
+
+        }).addTo(map);
+    });
+
+
+
+    // Friedenau-Grenze laden
+  fetch("./data/boundaries/friedenau.geojson")
+    .then(res => res.json())
+    .then(data => {
+      const boundaryLayer = L.geoJSON(data, {
+        style: {
+          color: "#444",
+          weight: 2,
+          fillOpacity: 0.05
+        }
+      }).addTo(map);
+
+      // Karte auf Friedenau zoomen
+      map.fitBounds(boundaryLayer.getBounds());
+    });
+
 </script>
+
+</body>
+</html>

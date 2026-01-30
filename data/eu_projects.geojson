@@ -1,4 +1,23 @@
 {
   "type": "FeatureCollection",
-  "features": []
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [13.3288, 52.4705] },
+      "properties": {
+        "name": "Radweg Friedenau Nord",
+        "program": "EFRE",
+        "eu_flag": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [13.3300, 52.4710] },
+      "properties": {
+        "name": "Lokales Kunstprojekt",
+        "program": "Kulturfonds",
+        "eu_flag": false
+      }
+    }
+  ]
 }
