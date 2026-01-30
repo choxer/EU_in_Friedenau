@@ -1,0 +1,10 @@
+<script type="module">
+  import { initMap } from "./js/map.js";
+  import { createEuLayer } from "./js/layers.js";
+  import { loadGeoJSON } from "./js/dataLoader.js";
+
+  const map = initMap();
+
+  const euData = await loadGeoJSON("./data/eu_projects.geojson");
+  createEuLayer(euData).addTo(map);
+</script>
